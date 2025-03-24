@@ -1,5 +1,5 @@
 import 'package:fitness_app/constant/constant.dart';
-import 'package:fitness_app/screens/splash_screen.dart';
+import 'package:fitness_app/screens/onboarding_screen.dart';
 import 'package:flutter/material.dart';
 
 void main() {
@@ -12,11 +12,12 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      debugShowCheckedModeBanner: false,
       title: 'Fitness App',
       theme: ThemeData(
         primaryColor: Constant.primaryColor,
       ),
-      home: SplashScreen(),
+      home: OnboardingScreen(),
     );
   }
 }
