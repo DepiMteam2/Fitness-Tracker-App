@@ -16,25 +16,25 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
     {
       "title": "Track Your Goal",
       "description":
-      "Don't worry if you have trouble determining your goals. We can help you determine your goals and track them.",
+          "Don't worry if you have trouble determining your goals. We can help you determine your goals and track them.",
       "image": "assets/images/onboarding1.png"
     },
     {
       "title": "Get Burn",
       "description":
-      "Let's keep burning to achieve your goals. It hurts only temporarily. If you give up now, you will be in pain forever.",
+          "Let's keep burning to achieve your goals. It hurts only temporarily. If you give up now, you will be in pain forever.",
       "image": "assets/images/onboarding2.png"
     },
     {
       "title": "Eat Well",
       "description":
-      "Let's start a healthy lifestyle with us. We can determine your diet every day. Healthy eating is fun.",
+          "Let's start a healthy lifestyle with us. We can determine your diet every day. Healthy eating is fun.",
       "image": "assets/images/onboarding3.png"
     },
     {
       "title": "Improve Sleep Quality",
       "description":
-      "Improve the quality of your sleep with us, good quality sleep can bring a good mood in the morning",
+          "Improve the quality of your sleep with us, good quality sleep can bring a good mood in the morning",
       "image": "assets/images/onboarding4.png"
     },
   ];
@@ -53,8 +53,6 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
 
   @override
   Widget build(BuildContext context) {
-    double progress = (_currentPage + 1) / onboardingData.length;
-
     return Scaffold(
       backgroundColor: Colors.white,
       body: Stack(
@@ -129,7 +127,8 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                         child: CircularProgressIndicator(
                           value: value,
                           strokeWidth: 3,
-                          valueColor: const AlwaysStoppedAnimation(Color(0xFFB266FF)),
+                          valueColor:
+                              const AlwaysStoppedAnimation(Color(0xFFB266FF)),
                         ),
                       ),
                       Container(
@@ -138,7 +137,8 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                           shape: BoxShape.circle,
                           color: Color(0xFFB266FF),
                         ),
-                        child: const Icon(Icons.arrow_forward_ios_rounded, color: Colors.white),
+                        child: const Icon(Icons.arrow_forward_ios_rounded,
+                            color: Colors.white),
                       ),
                     ],
                   );

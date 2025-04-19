@@ -1,4 +1,3 @@
-import 'package:fitness_app/constant/constant.dart';
 import 'package:fitness_app/screens/onboarding_screen.dart';
 import 'package:flutter/material.dart';
 
@@ -27,8 +26,10 @@ class WelcomeScreen extends StatelessWidget {
               child: ElevatedButton(
                 onPressed: () {
                   Navigator.pushReplacement(
-                      context,
-                      MaterialPageRoute(builder: (context) => OnboardingScreen(),),
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => OnboardingScreen(),
+                    ),
                   );
                 },
                 style: ElevatedButton.styleFrom(
@@ -43,8 +44,7 @@ class WelcomeScreen extends StatelessWidget {
                   style: TextStyle(
                       fontSize: 18,
                       color: Colors.white,
-                      fontWeight: FontWeight.bold
-                  ),
+                      fontWeight: FontWeight.bold),
                 ),
               ),
             ),
