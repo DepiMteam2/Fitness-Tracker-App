@@ -1,0 +1,2 @@
+E:/pdf/Fitness-Tracker-App/android/app/.cxx/Debug/2p6t9162/x86/CMakeFiles/edit_cache.dir
+E:/pdf/Fitness-Tracker-App/android/app/.cxx/Debug/2p6t9162/x86/CMakeFiles/rebuild_cache.dir

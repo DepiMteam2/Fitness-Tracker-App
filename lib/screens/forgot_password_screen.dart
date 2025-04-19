@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 
 
 class ForgotPasswordScreen extends StatefulWidget {
+  const ForgotPasswordScreen({super.key});
+
   @override
   _ForgotPasswordScreenState createState() => _ForgotPasswordScreenState();
 }
@@ -65,7 +67,7 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                 ),
               ),
               SizedBox(height: 40),
-              Container(
+              SizedBox(
                 width: double.infinity,
                 height: 56,
                 child: ElevatedButton(
@@ -81,18 +83,18 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                       Navigator.of(context).pop();
                     });
                   },
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Color(0xFF9747FF),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(28),
+                    ),
+                  ),
                   child: Text(
                     'Send Link',
                     style: TextStyle(
                       fontSize: 18,
                       fontWeight: FontWeight.bold,
                       color: Colors.white,
-                    ),
-                  ),
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: Color(0xFF9747FF),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(28),
                     ),
                   ),
                 ),

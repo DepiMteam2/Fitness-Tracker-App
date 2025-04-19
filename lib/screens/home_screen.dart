@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 
 class HomeScreen extends StatelessWidget {
+  const HomeScreen({super.key});
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -28,7 +30,7 @@ class HomeScreen extends StatelessWidget {
                         width: 250,
                         height: 250,
                         errorBuilder: (context, error, stackTrace) =>
-                            Container(
+                            SizedBox(
                               width: 250,
                               height: 250,
                               child: Column(
@@ -66,24 +68,24 @@ class HomeScreen extends StatelessWidget {
           ),
           Padding(
             padding: const EdgeInsets.all(24.0),
-            child: Container(
+            child: SizedBox(
               width: double.infinity,
               height: 56,
               child: ElevatedButton(
                 onPressed: () {
                 },
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Color(0xFF9747FF),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(28),
+                  ),
+                ),
                 child: Text(
                   'Go To Home',
                   style: TextStyle(
                     fontSize: 18,
                     fontWeight: FontWeight.bold,
                     color: Colors.white,
-                  ),
-                ),
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: Color(0xFF9747FF),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(28),
                   ),
                 ),
               ),
