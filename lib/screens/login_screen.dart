@@ -1,6 +1,6 @@
+import 'package:fitness_app/screens/forgot_password_screen.dart';
+import 'package:fitness_app/screens/home_screen.dart';
 import 'package:flutter/material.dart';
-import 'forgot_password_screen.dart';
-import 'home_screen.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
