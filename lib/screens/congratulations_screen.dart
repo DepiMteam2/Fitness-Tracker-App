@@ -14,10 +14,10 @@ class CongratulationsScreen extends StatelessWidget {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Image.asset(
-                'assets/images/success_registration_image.png',
-                height: 450,
-              ),
+              // Image.asset(
+              //   'assets/images/success_registration_image.png',
+              //   height: 450,
+              // ),
               const SizedBox(height: 32),
               const Text(
                 "Congratulations, You Have\nFinished Your Workout",
