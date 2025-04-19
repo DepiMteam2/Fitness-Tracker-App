@@ -31,7 +31,7 @@ class _LoginScreenState extends State<LoginScreen> {
                 style: TextStyle(
                   fontSize: 22,
                   fontWeight: FontWeight.normal,
-                  color: Colors.black,
+                  color: Color(0xFF7B78FF),
                 ),
               ),
               SizedBox(height: 2),
@@ -40,7 +40,7 @@ class _LoginScreenState extends State<LoginScreen> {
                 style: TextStyle(
                   fontSize: 30,
                   fontWeight: FontWeight.bold,
-                  color: Colors.black,
+                  color: Color(0xFF7B78FF),
                 ),
               ),
               SizedBox(height: 40),

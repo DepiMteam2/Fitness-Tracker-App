@@ -48,9 +48,9 @@ class HomeScreen extends StatelessWidget {
                   Text(
                     'Welcome, Stefani',
                     style: TextStyle(
-                      fontSize: 24,
+                      fontSize: 26,
                       fontWeight: FontWeight.bold,
-                      color: Colors.black,
+                      color: Color(0xFF7B78FF),
                     ),
                   ),
                   SizedBox(height: 10),
