@@ -25,28 +25,27 @@ class _LoginScreenState extends State<LoginScreen> {
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              SizedBox(height: 80),
+              SizedBox(height: 25),
               Text(
                 'Hey there,',
                 style: TextStyle(
                   fontSize: 22,
                   fontWeight: FontWeight.normal,
-                  color: Color(0xFF7B78FF),
+                  color: Colors.black,
                 ),
               ),
-              SizedBox(height: 2),
               Text(
                 'Welcome Back',
                 style: TextStyle(
                   fontSize: 30,
                   fontWeight: FontWeight.bold,
-                  color: Color(0xFF7B78FF),
+                  color: Colors.black,
                 ),
               ),
               SizedBox(height: 40),
               Container(
                 decoration: BoxDecoration(
-                  color: Colors.grey[100],
+                  color: Color(0xFFF7F8F8),
                   borderRadius: BorderRadius.circular(12),
                 ),
                 child: TextField(
@@ -62,7 +61,7 @@ class _LoginScreenState extends State<LoginScreen> {
               SizedBox(height: 16),
               Container(
                 decoration: BoxDecoration(
-                  color: Colors.grey[100],
+                  color: Color(0xFFF7F8F8),
                   borderRadius: BorderRadius.circular(12),
                 ),
                 child: TextField(
@@ -105,10 +104,10 @@ class _LoginScreenState extends State<LoginScreen> {
                   ),
                 ),
               ),
-              SizedBox(height: 40),
+              SizedBox(height: 220),
               SizedBox(
                 width: double.infinity,
-                height: 56,
+                height: 63,
                 child: ElevatedButton(
                   onPressed: () {
                     Navigator.of(context).pushReplacement(
@@ -118,7 +117,7 @@ class _LoginScreenState extends State<LoginScreen> {
                     );
                   },
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: Color(0xFF9747FF),
+                    backgroundColor: Color(0xFFA274F1),
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(28),
                     ),
@@ -126,7 +125,11 @@ class _LoginScreenState extends State<LoginScreen> {
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      Icon(Icons.login, color: Colors.white),
+                      Icon(
+                          Icons.login,
+                          color: Colors.white,
+                          size: 23,
+                      ),
                       SizedBox(width: 8),
                       Text(
                         'Login',

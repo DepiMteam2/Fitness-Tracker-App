@@ -3,11 +3,17 @@ flutter_native_splash:
   ios: true
   web: false
   color: "#ffffff"
-  image: assets/images/splash_logo.png
+  color_dark: "#1D1D1D"
+  image: assets/images/splash_logo_light_mode.png
+  image_dark: assets/images/splash_logo_dark_mode.png
   branding: assets/images/splash_brand_logo_black.png
+  branding_dark: assets/images/splash_brand_logo_white.png
 
   android_12:
     color: "#ffffff"
-    image: assets/images/splash_logo.png
+    color_dark: "#1D1D1D"
+    image: assets/images/splash_logo_light_mode.png
+    image_dark: assets/images/splash_logo_dark_mode.png
     branding: assets/images/splash_brand_logo_black.png
+    branding_dark: assets/images/splash_brand_logo_white.png
 

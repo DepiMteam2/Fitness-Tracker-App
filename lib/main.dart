@@ -1,5 +1,4 @@
 import 'package:fitness_app/constant/constant.dart';
-import 'package:fitness_app/screens/congratulations_screen.dart';
 import 'package:fitness_app/screens/welcome_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -16,11 +15,11 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      title: 'Fitness App',
+      title: 'FitYou',
       theme: ThemeData(
         primaryColor: Constant.primaryColor,
       ),
-      home: CongratulationsScreen(),
+      home: WelcomeScreen(),
     );
   }
 }
