@@ -1,5 +1,5 @@
+import 'package:fitness_app/src/models/user_profile_model.dart';
 import 'package:flutter/material.dart';
-import 'package:fitness_app/models/user_profile_model.dart';
 
 class ProfileHeader extends StatelessWidget {
   final UserProfileModel user;

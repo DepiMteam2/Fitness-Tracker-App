@@ -1,5 +1,6 @@
-import 'package:fitness_app/constant/constant.dart';
-import 'package:fitness_app/screens/welcome_screen.dart';
+
+import 'package:fitness_app/src/constant/constant.dart';
+import 'package:fitness_app/src/screens/welcome_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 

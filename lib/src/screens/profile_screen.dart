@@ -1,9 +1,9 @@
+import 'package:fitness_app/src/models/user_profile_model.dart';
+import 'package:fitness_app/src/widgets/list_tile_item.dart';
+import 'package:fitness_app/src/widgets/profile_header.dart';
+import 'package:fitness_app/src/widgets/section_title.dart';
+import 'package:fitness_app/src/widgets/stat_card.dart';
 import 'package:flutter/material.dart';
-import 'package:fitness_app/models/user_profile_model.dart';
-import 'package:fitness_app/widgets/profile_header.dart';
-import 'package:fitness_app/widgets/stat_card.dart';
-import 'package:fitness_app/widgets/section_title.dart';
-import 'package:fitness_app/widgets/list_tile_item.dart';
 
 class ProfileScreen extends StatelessWidget {
   const ProfileScreen({super.key});
