@@ -1,6 +1,7 @@
 
 import 'package:fitness_app/src/constant/constant.dart';
 import 'package:fitness_app/src/screens/change_password_screen.dart';
+import 'package:fitness_app/src/screens/onboarding_screen.dart';
 import 'package:fitness_app/src/screens/welcome_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -21,7 +22,7 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primaryColor: Constant.primaryColor,
       ),
-      home:ChangePasswordScreen(),
+      home:OnboardingScreen(),
     );
   }
 }

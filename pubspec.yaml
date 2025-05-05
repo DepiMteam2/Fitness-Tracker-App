@@ -36,6 +36,7 @@ dependencies:
   cupertino_icons: ^1.0.8
   flutter_launcher_icons: ^0.14.3
   flutter_native_splash: ^2.4.4
+  flutter_otp_text_field: ^1.5.1+1
 
 flutter_launcher_icons:
   android: "launcher_icon"
