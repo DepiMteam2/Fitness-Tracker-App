@@ -1,6 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:fitness_app/src/constant/constant.dart';
+import 'package:fitness_app/src/screens/kcal_screen.dart';
 import 'package:flutter/material.dart';
 import '/src/widgets/header_home.dart';
 import '/src/widgets/progress_card.dart';
@@ -50,6 +51,10 @@ class _HomeScreenState extends State<HomeScreen> {
     ),
   ];
 
+  final FirebaseAuth _auth = FirebaseAuth.instance;
+
+  final FirebaseFirestore _firestore = FirebaseFirestore.instance;
+
   final user = FirebaseAuth.instance.currentUser!;
 
   String? userName;
@@ -59,6 +64,22 @@ class _HomeScreenState extends State<HomeScreen> {
   void initState() {
     super.initState();
     _fetchUserName();
+    _checkKcal();
+  }
+
+  Future<void> _checkKcal() async {
+    final user = _auth.currentUser;
+    if (user != null) {
+      final docRef = _firestore.collection('users').doc(user.uid);
+      final doc = await docRef.get();
+
+      if (!doc.exists || doc.data()?['kcal'] == null) {
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(builder: (_) => KcalScreen()),
+        );
+      }
+    }
   }
 
   Future<void> _fetchUserName() async {
@@ -79,7 +100,6 @@ class _HomeScreenState extends State<HomeScreen> {
     }
   }
 
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -92,11 +112,10 @@ class _HomeScreenState extends State<HomeScreen> {
               isLoading
                   ? Center(child: CircularProgressIndicator(color: Constant.secondColor,))
                   : HeaderWidget(userName: userName ?? 'User'),
-              const SizedBox(height: 35),
-              const ProgressCard(progress: 0.25),
-              const SizedBox(height: 30),
+              SizedBox(height: 35),
+              ProgressCard(progress: 0.25),
+              SizedBox(height: 30),
 
-              // Section Title: Goals
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
@@ -110,7 +129,6 @@ class _HomeScreenState extends State<HomeScreen> {
                   ),
                   TextButton(
                     onPressed: () {
-                      // TODO: Navigate to all goals screen
                     },
                     child: Text(
                       'See all',
@@ -125,7 +143,6 @@ class _HomeScreenState extends State<HomeScreen> {
               ),
               const SizedBox(height: 12),
 
-              // Goals Horizontal List
               SizedBox(
                 height: 300,
                 child: ListView.separated(
@@ -143,7 +160,6 @@ class _HomeScreenState extends State<HomeScreen> {
 
               const SizedBox(height: 16),
 
-              // Section Title: Daily Task
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
@@ -157,7 +173,6 @@ class _HomeScreenState extends State<HomeScreen> {
                   ),
                   TextButton(
                     onPressed: () {
-                      // TODO: Navigate to all tasks screen
                     },
                     child: Text(
                       'See all',

@@ -1,11 +1,45 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:fitness_app/src/classes/kcal_burn_suggestion.dart';
 import 'package:fitness_app/src/constant/constant.dart';
 import 'package:flutter/material.dart';
 
-class MyPlanScreen extends StatelessWidget {
+class MyPlanScreen extends StatefulWidget {
+  const MyPlanScreen({super.key});
+
+  @override
+  State<MyPlanScreen> createState() => _MyPlanScreenState();
+}
+
+class _MyPlanScreenState extends State<MyPlanScreen> {
+  Map<String, dynamic>? suggestions;
+
+  @override
+  void initState() {
+    super.initState();
+    fetchKcalData();
+  }
+
+  Future<void> fetchKcalData() async {
+    final user = FirebaseAuth.instance.currentUser;
+    if (user != null) {
+      final doc = await FirebaseFirestore.instance.collection('users').doc(user.uid).get();
+      final kcalValue = doc.data()?['kcal'];
+
+      if (kcalValue != null) {
+        final kcal = double.tryParse(kcalValue.toString()) ?? 0;
+        final result = KcalBurnSuggestion(targetKcal: kcal).getSuggestionsSummary();
+
+        setState(() {
+          suggestions = result;
+        });
+      }
+    }
+  }
 
   Widget buildStatCard(String title, String value, String unit, Color color, IconData icon) {
     return Container(
-      padding: EdgeInsets.all(18),
+      padding: const EdgeInsets.all(18),
       decoration: BoxDecoration(
         color: color.withOpacity(0.1),
         borderRadius: BorderRadius.circular(44),
@@ -17,40 +51,33 @@ class MyPlanScreen extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Text(title,
-                  style: TextStyle(
+                  style: const TextStyle(
                       color: Color(0xFF00132D),
                       fontFamily: 'Poppins',
                       fontWeight: FontWeight.bold,
-                      fontSize: 18
-                  ),
-              ),
+                      fontSize: 18)),
               Container(
-                padding: EdgeInsets.all(7),
+                padding: const EdgeInsets.all(7),
                 decoration: BoxDecoration(
                   color: color,
                   shape: BoxShape.circle,
                 ),
                 child: Icon(icon, color: Colors.white, size: 18),
               ),
-
             ],
           ),
-          Spacer(),
+          const Spacer(),
           Text(
             value,
-            style: TextStyle(
+            style: const TextStyle(
                 fontSize: 26,
                 fontWeight: FontWeight.bold,
                 color: Color(0xFF00132D),
-                fontFamily: 'Poppins'
-            ),
+                fontFamily: 'Poppins'),
           ),
           Text(
-              unit,
-              style: TextStyle(
-                  color: Color(0xFF959E9F),
-                  fontFamily: 'Poppins'
-              ),
+            unit,
+            style: const TextStyle(color: Color(0xFF959E9F), fontFamily: 'Poppins'),
           ),
         ],
       ),
@@ -61,99 +88,46 @@ class MyPlanScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: const Color(0xFFFAFAFA),
-      appBar: AppBar(
-        backgroundColor: const Color(0xFFFAFAFA),
-        title: Text(
-          'My Plan',
-          style: TextStyle(
-            fontFamily: 'Poppins'
+      body: suggestions == null
+          ? const Center(child: CircularProgressIndicator())
+          : CustomScrollView(
+        slivers: [
+          SliverAppBar(
+            backgroundColor: const Color(0xFFFAFAFA),
+            pinned: true,
+            centerTitle: true,
+            title: const Text('My Plan', style: TextStyle(fontFamily: 'Poppins')),
           ),
-        ),
-        centerTitle: true,
-      ),
-      body: SafeArea(
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Row(
+          SliverPadding(
+            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+            sliver: SliverToBoxAdapter(
+              child: Row(
                 children: [
-                  Text("Daily Plan", style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold, fontFamily: 'Poppins')),
-                  Spacer(),
+                  const Text("Daily Plan", style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold, fontFamily: 'Poppins')),
+                  const Spacer(),
                   Text("Statics", style: TextStyle(color: Constant.secondColor, fontWeight: FontWeight.bold, fontFamily: 'Poppins')),
                 ],
               ),
-              SizedBox(height: 20),
-
-              // Daily Plan Cards
-              GridView.count(
+            ),
+          ),
+          SliverPadding(
+            padding: const EdgeInsets.symmetric(horizontal: 16),
+            sliver: SliverGrid(
+              delegate: SliverChildListDelegate([
+                buildStatCard("Calories", '${suggestions!['kcal']}', "Kcal", Colors.orange, Icons.local_fire_department),
+                buildStatCard("Steps", suggestions!['walk_km'], "Km", Colors.purple, Icons.directions_walk),
+                buildStatCard("Sleep", '${suggestions!['sleep_hours']} hr', "Hours", Colors.green, Icons.nightlight_round),
+                buildStatCard("Water", '${suggestions!['water_liters']} lits', "Liters", Colors.blue, Icons.water_drop),
+              ]),
+              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                 crossAxisCount: 2,
                 crossAxisSpacing: 20,
                 mainAxisSpacing: 20,
-                shrinkWrap: true,
-                physics: NeverScrollableScrollPhysics(),
-                children: [
-                  buildStatCard("Calories", "720", "Kcal", Colors.orange, Icons.local_fire_department),
-                  buildStatCard("Steps", "1000", "Steps", Colors.purple, Icons.directions_walk),
-                  buildStatCard("Sleep", "6 hr", "Hours", Colors.green, Icons.nightlight_round),
-                  buildStatCard("Water", "2 lits", "Liters", Colors.blue, Icons.water_drop),
-                ],
+                mainAxisExtent: 160,
               ),
-              SizedBox(height: 20),
-
-              // Goal In Progress
-              Text("Goal In Progress", style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
-              SizedBox(height: 12),
-              Container(
-                decoration: BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.circular(16),
-                  boxShadow: [BoxShadow(color: Colors.black12, blurRadius: 6)],
-                ),
-                child: Column(
-                  children: [
-                    ClipRRect(
-                      borderRadius: BorderRadius.vertical(top: Radius.circular(16)),
-                      child: Image.network(
-                        'https://images.pexels.com/photos/3837753/pexels-photo-3837753.jpeg?auto=compress',
-                        height: 180,
-                        width: double.infinity,
-                        fit: BoxFit.cover,
-                      ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.all(16),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text("Body Building", style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
-                          Text("Full body workout", style: TextStyle(color: Colors.grey[600])),
-                          SizedBox(height: 10),
-                          Row(
-                            children: [
-                              Chip(
-                                label: Text("35 min"),
-                                avatar: Icon(Icons.timer, color: Colors.green),
-                                backgroundColor: Colors.green.withOpacity(0.1),
-                              ),
-                              SizedBox(width: 10),
-                              Chip(
-                                label: Text("120 cal"),
-                                avatar: Icon(Icons.local_fire_department, color: Colors.orange),
-                                backgroundColor: Colors.orange.withOpacity(0.1),
-                              ),
-                            ],
-                          )
-                        ],
-                      ),
-                    )
-                  ],
-                ),
-              )
-            ],
+            ),
           ),
-        ),
+        ],
       ),
     );
   }
