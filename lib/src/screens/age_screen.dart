@@ -1,7 +1,9 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:fitness_app/src/constant/constant.dart';
 import 'package:flutter/material.dart';
 
 import 'height_screen.dart';
-
 
 class AgeScreen extends StatefulWidget {
   AgeScreen({Key? key}) : super(key: key);
@@ -12,8 +14,8 @@ class AgeScreen extends StatefulWidget {
 
 class _AgeScreenState extends State<AgeScreen> {
   double selectedAge = 20;
-  double minAge = 19;
-  double maxAge = 22;
+  final double minAge = 14;
+  final double maxAge = 50;
 
   @override
   Widget build(BuildContext context) {
@@ -25,42 +27,37 @@ class _AgeScreenState extends State<AgeScreen> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              SizedBox(height: 40),
+              SizedBox(height: 20),
               Center(
-                child: Text(
-                  'HealYou',
-                  style: TextStyle(
-                    color: Color(0xFF39A2DB),
-                    fontSize: 24,
-                    fontWeight: FontWeight.w500,
-                  ),
+                child: Image.asset(
+                  Constant.appLogoLightMode,
+                  width: 120,
+                  height: 120,
+                  fit: BoxFit.contain,
                 ),
               ),
-              SizedBox(height: 50),
+              SizedBox(height: 20),
               Center(
                 child: Text(
                   'Tell us\nyour age',
                   textAlign: TextAlign.center,
                   style: TextStyle(
-                    fontSize: 30,
+                    fontSize: 40,
                     fontWeight: FontWeight.bold,
                     color: Color(0xFF0F172A),
+                    fontFamily: 'Poppins'
                   ),
                 ),
               ),
               SizedBox(height: 40),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Text(
-                    selectedAge.toInt().toString(),
-                    style: TextStyle(
-                      color: Color(0xFF0D2339),
-                      fontSize: 40,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                ],
+              Text(
+                selectedAge.toInt().toString(),
+                style: TextStyle(
+                  color: Color(0xFF0D2339),
+                  fontSize: 40,
+                  fontWeight: FontWeight.bold,
+                  fontFamily: 'Poppins'
+                ),
               ),
               SizedBox(height: 40),
               SliderTheme(
@@ -88,15 +85,52 @@ class _AgeScreenState extends State<AgeScreen> {
               SizedBox(height: 8),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  _buildAgeMarker(19),
-                  _buildAgeMarker(20),
-                  _buildAgeMarker(21),
-                  _buildAgeMarker(22),
-                ],
+                children: [14, 22, 32, 42, 50]
+                    .map((age) => _buildAgeMarker(age))
+                    .toList(),
               ),
               Spacer(),
-              _buildNextButton(),
+              Padding(
+                padding: EdgeInsets.only(bottom: 30),
+                child: ElevatedButton(
+                  onPressed: () async {
+                    try {
+                      final user = FirebaseAuth.instance.currentUser;
+                      if (user != null) {
+                        await FirebaseFirestore.instance
+                            .collection('users')
+                            .doc(user.uid)
+                            .update({
+                          'age': selectedAge.toInt(),
+                        });
+
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(builder: (context) => HeightScreen()),
+                        );
+                      } else {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          const SnackBar(content: Text('User not logged in')),
+                        );
+                      }
+                    } catch (e) {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(content: Text('Error: ${e.toString()}')),
+                      );
+                    }
+                  },
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Color(0xFF39A2DB),
+                    shape: CircleBorder(),
+                    padding: EdgeInsets.all(16),
+                  ),
+                  child: Icon(
+                    Icons.chevron_right,
+                    color: Colors.white,
+                    size: 24,
+                  ),
+                ),
+              ),
             ],
           ),
         ),
@@ -111,35 +145,11 @@ class _AgeScreenState extends State<AgeScreen> {
       age.toString(),
       style: TextStyle(
         color: isSelected ? Color(0xFF39A2DB) : Colors.grey,
-        fontWeight: isSelected ? FontWeight.bold : FontWeight.bold,
+        fontWeight: FontWeight.bold,
         fontSize: 14,
+        fontFamily: 'Poppins'
       ),
     );
   }
 
-  Widget _buildNextButton() {
-    return GestureDetector(
-      onTap: () {
-        Navigator.push(
-          context,
-          MaterialPageRoute(
-            builder: (context) => HeightScreen(),
-          ),
-        );
-      },
-      child: Container(
-        width: 60,
-        height: 60,
-        decoration: BoxDecoration(
-          color: Color(0xFF39A2DB),
-          shape: BoxShape.circle,
-        ),
-        child: Icon(
-          Icons.chevron_right,
-          color: Colors.white,
-          size: 30,
-        ),
-      ),
-    );
-  }
 }

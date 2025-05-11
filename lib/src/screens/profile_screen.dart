@@ -1,24 +1,69 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/material.dart';
 import 'package:fitness_app/src/models/user_profile_model.dart';
 import 'package:fitness_app/src/widgets/list_tile_item.dart';
 import 'package:fitness_app/src/widgets/profile_header.dart';
 import 'package:fitness_app/src/widgets/section_title.dart';
 import 'package:fitness_app/src/widgets/stat_card.dart';
-import 'package:flutter/material.dart';
 
-class ProfileScreen extends StatelessWidget {
+class ProfileScreen extends StatefulWidget {
   const ProfileScreen({super.key});
 
   @override
-  Widget build(BuildContext context) {
-    final user = UserProfileModel(
-      name: 'Masi Ramezanzade',
-      program: 'Lose a Fat Program',
-      avatar: 'assets/images/profile.png',
-      height: '180cm',
-      weight: '65kg',
-      age: '22yo',
-    );
+  State<ProfileScreen> createState() => _ProfileScreenState();
+}
 
+class _ProfileScreenState extends State<ProfileScreen> {
+  UserProfileModel? user;
+  bool isLoading = true;
+
+  @override
+  void initState() {
+    super.initState();
+    fetchUserProfile();
+  }
+
+  Future<void> fetchUserProfile() async {
+    try {
+      final currentUser = FirebaseAuth.instance.currentUser;
+      if (currentUser != null) {
+        final doc = await FirebaseFirestore.instance
+            .collection('users')
+            .doc(currentUser.uid)
+            .get();
+
+        if (doc.exists) {
+          final data = doc.data();
+          setState(() {
+            user = UserProfileModel(
+              name: data?['username'] ?? 'User',
+              program: data?['program'] ?? 'No Program',
+              avatar: 'assets/images/profile.png',
+              height: data?['height'] ?? '0cm',
+              weight: data?['weight'] ?? '0kg',
+              age: data?['age'] ?? '0yo',
+            );
+            isLoading = false;
+          });
+        } else {
+          print('No user data found for this user.');
+          setState(() {
+            isLoading = false;
+          });
+        }
+      }
+    } catch (e) {
+      print('Error loading user profile: $e');
+      setState(() {
+        isLoading = false;
+      });
+    }
+  }
+
+
+  @override
+  Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: const Color(0xfffdfdfe),
       appBar: AppBar(
@@ -37,26 +82,24 @@ class ProfileScreen extends StatelessWidget {
           ),
         ),
         centerTitle: true,
-        actions: const [
-          Padding(
-            padding: EdgeInsets.only(right: 16.0),
-            child: Icon(Icons.more_horiz, color: Colors.black87),
-          )
-        ],
       ),
-      body: SingleChildScrollView(
+      body: isLoading
+          ? const Center(child: CircularProgressIndicator())
+          : user == null
+          ? const Center(child: Text("No user data found"))
+          : SingleChildScrollView(
         padding: const EdgeInsets.symmetric(horizontal: 20),
         child: Column(
           children: [
             const SizedBox(height: 16),
-            ProfileHeader(user: user),
+            ProfileHeader(user: user!),
             const SizedBox(height: 24),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                StatCard(label: 'Height', value: user.height),
-                StatCard(label: 'Weight', value: user.weight),
-                StatCard(label: 'Age', value: user.age),
+                StatCard(label: 'Height', value: user!.height),
+                StatCard(label: 'Weight', value: user!.weight),
+                StatCard(label: 'Age', value: user!.age),
               ],
             ),
             const SizedBox(height: 24),
@@ -65,7 +108,8 @@ class ProfileScreen extends StatelessWidget {
                 icon: Icons.person_outline, label: 'Personal Data'),
             const ListTileItem(
                 icon: Icons.emoji_events_outlined, label: 'Achievement'),
-            const ListTileItem(icon: Icons.history, label: 'Activity History'),
+            const ListTileItem(
+                icon: Icons.history, label: 'Activity History'),
             const ListTileItem(
                 icon: Icons.show_chart_outlined, label: 'Workout Progress'),
             const SizedBox(height: 24),

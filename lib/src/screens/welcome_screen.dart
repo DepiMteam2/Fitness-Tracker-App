@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'package:fitness_app/src/auth/Auth.dart';
 import 'package:fitness_app/src/constant/constant.dart';
 import 'package:fitness_app/src/screens/onboarding_screen.dart';
 import 'package:flutter/material.dart';

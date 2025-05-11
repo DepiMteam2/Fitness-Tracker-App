@@ -1,3 +1,6 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:fitness_app/src/constant/constant.dart';
 import 'package:flutter/material.dart';
 import 'age_screen.dart';
 
@@ -21,30 +24,29 @@ class _GenderSelectionScreenState extends State<GenderSelectionScreen> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              SizedBox(height: 40),
+              SizedBox(height: 20),
               Center(
-                child: Text(
-                  'HealYou',
-                  style: TextStyle(
-                    color: Color(0xFF39A2DB),
-                    fontSize: 24,
-                    fontWeight: FontWeight.w500,
-                  ),
+                child: Image.asset(
+                  Constant.appLogoLightMode,
+                  width: 120,
+                  height: 120,
+                  fit: BoxFit.contain,
                 ),
               ),
-              SizedBox(height: 50),
+              SizedBox(height: 20),
               Center(
                 child: Text(
                   'Tell us\nyour gender',
                   textAlign: TextAlign.center,
                   style: TextStyle(
-                    fontSize: 30,
+                    fontSize: 40,
                     fontWeight: FontWeight.bold,
                     color: Color(0xFF0F172A),
+                    fontFamily: 'Poppins'
                   ),
                 ),
               ),
-              SizedBox(height: 40),
+              SizedBox(height: 100),
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
@@ -80,11 +82,31 @@ class _GenderSelectionScreenState extends State<GenderSelectionScreen> {
                 padding: EdgeInsets.only(bottom: 30),
                 child: ElevatedButton(
                   onPressed: _selectedGender != null
-                      ? () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (context) => AgeScreen()),
-                    );
+                      ? () async {
+                    try {
+                      final user = FirebaseAuth.instance.currentUser;
+                      if (user != null) {
+                        await FirebaseFirestore.instance
+                            .collection('users')
+                            .doc(user.uid)
+                            .update({
+                          'gender': _selectedGender,
+                        });
+
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(builder: (context) => AgeScreen()),
+                        );
+                      } else {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          const SnackBar(content: Text('User not logged in')),
+                        );
+                      }
+                    } catch (e) {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(content: Text('Error: ${e.toString()}')),
+                      );
+                    }
                   }
                       : null,
                   style: ElevatedButton.styleFrom(
@@ -160,6 +182,7 @@ class GenderOption extends StatelessWidget {
                 style: TextStyle(
                   fontSize: 16,
                   fontWeight: FontWeight.bold,
+                  fontFamily: 'Poppins'
                 ),
               ),
               SizedBox(height: 8),
@@ -171,6 +194,7 @@ class GenderOption extends StatelessWidget {
                   style: TextStyle(
                     fontSize: 12,
                     color: Colors.grey.shade600,
+                    fontFamily: 'Poppins'
                   ),
                 ),
               ),

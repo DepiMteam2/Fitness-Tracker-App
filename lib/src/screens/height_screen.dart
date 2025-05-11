@@ -1,4 +1,7 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:fitness_app/src/constant/constant.dart';
 import 'weight_screen.dart';
 
 class HeightScreen extends StatefulWidget {
@@ -9,9 +12,9 @@ class HeightScreen extends StatefulWidget {
 }
 
 class _HeightScreenState extends State<HeightScreen> {
-  double selectedHeight = 5.25;
-  double minHeight = 5.1;
-  double maxHeight = 5.5;
+  double selectedHeight = 5.2;
+  final double minHeight = 4.0;
+  final double maxHeight = 7.0;
 
   @override
   Widget build(BuildContext context) {
@@ -19,57 +22,49 @@ class _HeightScreenState extends State<HeightScreen> {
       backgroundColor: Colors.white,
       body: SafeArea(
         child: Padding(
-          padding: EdgeInsets.symmetric(horizontal: 24.0),
+          padding: const EdgeInsets.symmetric(horizontal: 24.0),
           child: Column(
-            crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              SizedBox(height: 40),
+              const SizedBox(height: 20),
               Center(
-                child: Text(
-                  'HealYou',
-                  style: TextStyle(
-                    color: Color(0xFF39A2DB),
-                    fontSize: 24,
-                    fontWeight: FontWeight.w500,
-                  ),
+                child: Image.asset(
+                  Constant.appLogoLightMode,
+                  width: 120,
+                  height: 120,
+                  fit: BoxFit.contain,
                 ),
               ),
-              SizedBox(height: 50),
-              Center(
-                child: Text(
-                  'Tell us\nyour height',
-                  textAlign: TextAlign.center,
-                  style: TextStyle(
-                    fontSize: 30,
-                    fontWeight: FontWeight.bold,
-                    color: Color(0xFF0F172A),
-                  ),
+              const SizedBox(height: 20),
+              const Text(
+                'Tell us\nyour height',
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                  fontSize: 40,
+                  fontWeight: FontWeight.bold,
+                  color: Color(0xFF0F172A),
+                  fontFamily: 'Poppins',
                 ),
               ),
-              SizedBox(height: 40),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Text(
-                    _formatHeight(selectedHeight),
-                    style: TextStyle(
-                      color: Color(0xFF0D2339),
-                      fontSize: 40,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                ],
+              const SizedBox(height: 40),
+              Text(
+                _formatHeight(selectedHeight),
+                style: const TextStyle(
+                  color: Color(0xFF0D2339),
+                  fontSize: 40,
+                  fontWeight: FontWeight.bold,
+                  fontFamily: 'Poppins',
+                ),
               ),
-              SizedBox(height: 40),
+              const SizedBox(height: 40),
               SliderTheme(
-                data: SliderThemeData(
+                data: SliderTheme.of(context).copyWith(
                   trackHeight: 1,
-                  activeTrackColor: Color(0xFF1A9CB0),
+                  activeTrackColor: const Color(0xFF1A9CB0),
                   inactiveTrackColor: Colors.grey[300],
-                  thumbColor: Color(0xFF1A9CB0),
-                  overlayColor: Color(0xFF1A9CB0).withOpacity(0.2),
-                  thumbShape: RoundSliderThumbShape(enabledThumbRadius: 8),
-                  overlayShape: RoundSliderOverlayShape(overlayRadius: 16),
+                  thumbColor: const Color(0xFF1A9CB0),
+                  overlayColor: const Color(0xFF1A9CB0).withOpacity(0.2),
+                  thumbShape: const RoundSliderThumbShape(enabledThumbRadius: 8),
+                  overlayShape: const RoundSliderOverlayShape(overlayRadius: 16),
                 ),
                 child: Slider(
                   value: selectedHeight,
@@ -78,24 +73,66 @@ class _HeightScreenState extends State<HeightScreen> {
                   divisions: ((maxHeight - minHeight) * 10).toInt(),
                   onChanged: (value) {
                     setState(() {
-                      selectedHeight = value;
+                      selectedHeight = double.parse(value.toStringAsFixed(1));
                     });
                   },
                 ),
               ),
-              SizedBox(height: 8),
+              const SizedBox(height: 8),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  _buildHeightMarker(5.1),
-                  _buildHeightMarker(5.2),
-                  _buildHeightMarker(5.3),
-                  _buildHeightMarker(5.4),
+                  _buildHeightMarker(4.0),
+                  _buildHeightMarker(4.5),
+                  _buildHeightMarker(5.0),
                   _buildHeightMarker(5.5),
+                  _buildHeightMarker(6.0),
+                  _buildHeightMarker(6.5),
+                  _buildHeightMarker(7.0),
                 ],
               ),
-              Spacer(),
-              _buildNextButton(),
+              const Expanded(child: SizedBox()),
+              Padding(
+                padding: const EdgeInsets.only(bottom: 30),
+                child: ElevatedButton(
+                  onPressed: () async {
+                    try {
+                      final user = FirebaseAuth.instance.currentUser;
+                      if (user != null) {
+                        await FirebaseFirestore.instance
+                            .collection('users')
+                            .doc(user.uid)
+                            .update({
+                          'height': selectedHeight,
+                        });
+
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(builder: (context) => WeightScreen()),
+                        );
+                      } else {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          const SnackBar(content: Text('User not logged in')),
+                        );
+                      }
+                    } catch (e) {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(content: Text('Error: ${e.toString()}')),
+                      );
+                    }
+                  },
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: const Color(0xFF39A2DB),
+                    shape: const CircleBorder(),
+                    padding: const EdgeInsets.all(16),
+                  ),
+                  child: const Icon(
+                    Icons.chevron_right,
+                    color: Colors.white,
+                    size: 28,
+                  ),
+                ),
+              ),
             ],
           ),
         ),
@@ -105,47 +142,19 @@ class _HeightScreenState extends State<HeightScreen> {
 
   String _formatHeight(double height) {
     int feet = height.floor();
-    double inches = (height - feet) * 10;
-    return "$feet'${inches.round()}";
+    int inches = ((height - feet) * 12).round(); // 1 قدم = 12 إنش
+    return "$feet'$inches\"";
   }
 
-  Widget _buildHeightMarker(double height, {bool isDefault = false}) {
+  Widget _buildHeightMarker(double height) {
     bool isSelected = (selectedHeight * 10).round() == (height * 10).round();
-
     return Text(
       _formatHeight(height),
       style: TextStyle(
-        color: isSelected || (isDefault && !isSelected)
-            ? Color(0xFF39A2DB)
-            : Colors.grey,
-        fontWeight: isSelected ? FontWeight.bold : FontWeight.bold,
+        color: isSelected ? const Color(0xFF39A2DB) : Colors.grey,
+        fontWeight: FontWeight.bold,
         fontSize: 14,
-      ),
-    );
-  }
-
-  Widget _buildNextButton() {
-    return GestureDetector(
-      onTap: () {
-        Navigator.push(
-          context,
-          MaterialPageRoute(
-            builder: (context) => WeightScreen(),
-          ),
-        );
-      },
-      child: Container(
-        width: 60,
-        height: 60,
-        decoration: BoxDecoration(
-          color: Color(0xFF39A2DB),
-          shape: BoxShape.circle,
-        ),
-        child: Icon(
-          Icons.chevron_right,
-          color: Colors.white,
-          size: 30,
-        ),
+        fontFamily: 'Poppins',
       ),
     );
   }

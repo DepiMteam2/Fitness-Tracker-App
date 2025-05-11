@@ -2,7 +2,7 @@ import 'dart:ui';
 
 class Constant {
   //======------> COLORS <------======\\
-  static final Color primaryColor = Color(0xFF198FB4);
+  static final Color primaryColor = Color(0xFF39A2DB);
   static final Color secondColor = Color(0xFF25C3F8);
 
   //======------> IMAGES <------======\\

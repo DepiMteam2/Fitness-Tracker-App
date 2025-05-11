@@ -1,8 +1,9 @@
+import 'package:fitness_app/src/auth/Auth.dart';
 import 'package:fitness_app/src/constant/constant.dart';
 import 'package:fitness_app/src/models/onboarding_model.dart';
-import 'package:fitness_app/src/screens/login_screen.dart';
 import 'package:fitness_app/src/widgets/onboarding_builder.dart';
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';  // إضافة مكتبة shared_preferences
 
 class OnboardingScreen extends StatefulWidget {
   const OnboardingScreen({super.key});
@@ -38,11 +39,39 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
     ),
   ];
 
-  void _nextPage() {
+  @override
+  void initState() {
+    super.initState();
+    _checkOnboardingStatus();
+  }
+
+  // دالة للتحقق من حالة عرض الـ Onboarding
+  _checkOnboardingStatus() async {
+    final prefs = await SharedPreferences.getInstance();
+    bool? isOnboardingShown = prefs.getBool('isOnboardingShown') ?? false;
+
+    // إذا كانت القيمة true، نقوم بالانتقال مباشرة إلى شاشة الـ Auth
+    if (isOnboardingShown) {
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(builder: (_) => const Auth()),
+      );
+    }
+  }
+
+  void _nextPage() async {
     if (_currentPage < onboardingData.length - 1) {
       _controller.nextPage(duration: const Duration(milliseconds: 300), curve: Curves.easeIn);
     } else {
-      Navigator.pushReplacement(context, MaterialPageRoute(builder: (_) => const LoginScreen()));
+      // عند إتمام الـ Onboarding، نقوم بتخزين القيمة في SharedPreferences
+      final prefs = await SharedPreferences.getInstance();
+      await prefs.setBool('isOnboardingShown', true);
+
+      // التنقل إلى شاشة الـ Auth
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(builder: (_) => const Auth()),
+      );
     }
   }
 

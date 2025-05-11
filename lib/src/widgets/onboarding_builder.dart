@@ -29,6 +29,7 @@ class OnboardingBuilder extends StatelessWidget {
                   fontSize: 28,
                   fontWeight: FontWeight.bold,
                   color: Colors.white,
+                  fontFamily: 'Poppins'
                 ),
               ),
               const SizedBox(height: 12),
@@ -38,6 +39,7 @@ class OnboardingBuilder extends StatelessWidget {
                   fontSize: 16,
                   color: Colors.white70,
                   height: 1.5,
+                  fontFamily: 'Poppins'
                 ),
               ),
             ],

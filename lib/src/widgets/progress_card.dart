@@ -1,4 +1,6 @@
+import 'package:fitness_app/src/screens/my_plan_screen.dart';
 import 'package:flutter/material.dart';
+import 'package:percent_indicator/circular_percent_indicator.dart';
 
 class ProgressCard extends StatelessWidget {
   final double progress;
@@ -11,7 +13,7 @@ class ProgressCard extends StatelessWidget {
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(24),
         gradient: const LinearGradient(
-          colors: [Color(0xFFB388F8), Color(0xFF7F5AF0)],
+          colors: [Color(0xFF2193b0), Color(0xFF6dd5ed)],
           begin: Alignment.topLeft,
           end: Alignment.bottomRight,
         ),
@@ -23,41 +25,54 @@ class ProgressCard extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               TextButton(
-                onPressed: () {},
+                onPressed: () {
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => MyPlanScreen())
+                  );
+                },
                 child: Text(
-                  'My Plan',
+                  'My Plan\nFor Today',
                   style: TextStyle(
                     color: Colors.white,
-                    fontSize: 18,
+                    fontSize: 27,
                     fontWeight: FontWeight.bold,
+                    fontFamily: 'Poppins'
                   ),
                 ),
               ),
               const SizedBox(height: 8),
               Text(
                 '${(progress * 7).round()}/7 Complete',
-                style: const TextStyle(color: Colors.white70),
+                style: const TextStyle(color: Colors.white70, fontFamily: 'Poppins'),
               ),
             ],
           ),
-          Stack(
-            alignment: Alignment.center,
-            children: [
-              SizedBox(
-                height: 60,
-                width: 60,
-                child: CircularProgressIndicator(
-                  value: progress,
-                  strokeWidth: 6,
+          Padding(
+            padding: const EdgeInsets.only(right: 10),
+            child: Stack(
+              alignment: Alignment.center,
+              children: [
+                CircularPercentIndicator(
+                  radius: 60.0,
+                  lineWidth: 15.0,
+                  percent: progress,
                   backgroundColor: Colors.white24,
-                  valueColor: const AlwaysStoppedAnimation<Color>(Colors.white),
+                  progressColor: Colors.white,
+                  circularStrokeCap: CircularStrokeCap.round,
+                  center: Text(
+                    '${(progress * 100).round()}%',
+                    style: const TextStyle(
+                      color: Colors.white,
+                      fontFamily: 'Poppins',
+                      fontSize: 30,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  animation: true,
                 ),
-              ),
-              Text(
-                '${(progress * 100).round()}%',
-                style: const TextStyle(color: Colors.white),
-              ),
-            ],
+              ],
+            ),
           ),
         ],
       ),

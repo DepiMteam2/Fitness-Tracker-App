@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "978039550520",
+    "project_id": "fityouapp-b1c87",
+    "storage_bucket": "fityouapp-b1c87.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:978039550520:android:d5f8b551b243453bec2ccd",
+        "android_client_info": {
+          "package_name": "com.bytebrigade.fitness_app"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB0Gy1fxbdNYYRSkofeEVuFl3-nW5cwwbo"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
